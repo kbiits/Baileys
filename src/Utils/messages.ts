@@ -386,7 +386,7 @@ export const generateWAMessageFromContent = (
 	const { quoted, userJid } = options
 
 	if(quoted) {
-		const participant = quoted.key.fromMe ? userJid : (quoted.participant || quoted.key.participant || quoted.key.remoteJid)
+		const participant = quoted.key.fromMe ? userJid : cleanJid(quoted.participant || quoted.key.participant || quoted.key.remoteJid)
 
 		message[key].contextInfo = message[key].contextInfo || { }
 		message[key].contextInfo.participant = participant
@@ -586,3 +586,5 @@ export const downloadMediaMessage = async(message: WAMessage, type: 'buffer' | '
 
 	return stream
 }
+
+export const cleanJid = (jid: string) => jid.replace(/\:\d+/, '');

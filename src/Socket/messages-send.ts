@@ -3,7 +3,7 @@ import NodeCache from 'node-cache'
 import { proto } from '../../WAProto'
 import { WA_DEFAULT_EPHEMERAL } from '../Defaults'
 import { AnyMessageContent, MediaConnInfo, MessageReceiptType, MessageRelayOptions, MiscMessageGenerationOptions, SocketConfig, WAMessageKey } from '../Types'
-import { aggregateMessageKeysNotFromMe, encodeWAMessage, encryptSenderKeyMsgSignalProto, encryptSignalProto, extractDeviceJids, generateMessageID, generateWAMessage, getWAUploadToServer, jidToSignalProtocolAddress, parseAndInjectE2ESessions, unixTimestampSeconds } from '../Utils'
+import { aggregateMessageKeysNotFromMe, cleanJid, encodeWAMessage, encryptSenderKeyMsgSignalProto, encryptSignalProto, extractDeviceJids, generateMessageID, generateWAMessage, getWAUploadToServer, jidToSignalProtocolAddress, parseAndInjectE2ESessions, unixTimestampSeconds } from '../Utils'
 import { BinaryNode, BinaryNodeAttributes, getBinaryNodeChild, getBinaryNodeChildren, isJidGroup, isJidUser, jidDecode, jidEncode, jidNormalizedUser, JidWithDevice, reduceBinaryNodeToDictionary, S_WHATSAPP_NET } from '../WABinary'
 import { makeGroupsSocket } from './groups'
 
@@ -464,7 +464,7 @@ export const makeMessagesSocket = (config: SocketConfig) => {
 			content: AnyMessageContent,
 			options: MiscMessageGenerationOptions = { }
 		) => {
-			const userJid = authState.creds.me!.id
+			const userJid = cleanJid(authState.creds.me!.id);
 			if(
 				typeof content === 'object' &&
 				'disappearingMessagesInChat' in content &&
